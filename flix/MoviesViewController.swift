@@ -67,6 +67,9 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
+        let cellBackgroundView = UIView()
+        cellBackgroundView.backgroundColor = UIColor.lightGray
+        cell.selectedBackgroundView = cellBackgroundView
         
         return cell
     }
