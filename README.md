@@ -4,7 +4,7 @@
 
 Time spent: **5** hours spent in total
 
-## User Stories
+## Project 1: User Stories
 
 The following **required** functionality is complete:
 
@@ -23,9 +23,18 @@ The following **optional** features are implemented:
 - [ ] All images fade in as they are loading.
 - [ ] Customize the UI.
 
-The following **additional** features are implemented:
+## Project 2: User Stories
 
-- [ ] List anything else that you can get done to improve the app functionality!
+The following **required** functionality is completed:
+
+- [x] User can view movie details by tapping on a cell.
+- [x] User can select from a tab bar for either **Now Playing** or **Top Rated** movies.
+- [ ] Customize the selection effect of the cell.
+
+The following **optional** features are implemented:
+
+- [ ] For the large poster, load the low resolution image first and then switch to the high resolution image when complete.
+- [ ] Customize the navigation bar.
 
 ## Video Walkthrough
 

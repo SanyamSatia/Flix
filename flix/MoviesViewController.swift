@@ -58,13 +58,15 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = filteredMovies![indexPath.row]
         let title = movie.value(forKey: "title") as! String
         let overview = movie.value(forKey: "overview") as! String
-        let basePosterUrl = "https://image.tmdb.org/t/p/w500/"
-        let moviePosterUrl = movie.value(forKey: "poster_path") as! String
-        let imageUrl = URL(string: basePosterUrl + moviePosterUrl)
         
+        let basePosterUrl = "https://image.tmdb.org/t/p/w500/"
+        if let moviePosterUrl = movie.value(forKey: "poster_path") as? String {
+            let imageUrl = URL(string: basePosterUrl + moviePosterUrl)
+            cell.posterView.setImageWith(imageUrl!)
+        }
+    
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
-        cell.posterView.setImageWith(imageUrl!)
         
         return cell
     }
@@ -108,14 +110,20 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.endEditing(true)
     }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        let selectedCell = sender as! UITableViewCell
+        let indexPath = tableView.indexPath(for: selectedCell)
+        let selectedMovie = filteredMovies![indexPath!.row]
+        
+        let detailViewController = segue.destination as! DetailViewController
+        detailViewController.movie = selectedMovie
+        
     }
-    */
 
 }
