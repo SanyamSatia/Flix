@@ -2,7 +2,7 @@
 
 **Flix** is a movies app using the [The Movie Database API](http://docs.themoviedb.apiary.io/#).
 
-Time spent: **3** hours spent in total
+Time spent: **5** hours spent in total
 
 ## User Stories
 
@@ -16,9 +16,10 @@ The following **required** functionality is complete:
 The following **optional** features are implemented:
 
 - [x] Add a tab bar for Now Playing or Top Rated movies.
+- [x] User can search for a movie.
+- [x] Customize the navigation bar.
 - [ ] User sees an error message when there's a networking error.
 - [ ] Movies are displayed using a CollectionView instead of a TableView.
-- [ ] User can search for a movie.
 - [ ] All images fade in as they are loading.
 - [ ] Customize the UI.
 

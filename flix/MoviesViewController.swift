@@ -10,11 +10,13 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var movies: [NSDictionary]?
+    var filteredMovies: [NSDictionary]?
     var endpoint: String!
     
     override func viewDidLoad() {
@@ -22,6 +24,10 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
 
         tableView.dataSource = self
         tableView.delegate = self
+        searchBar.delegate = self
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        tableView.addGestureRecognizer(tap)
         
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(self.makeRequest(_:)), for: UIControlEvents.valueChanged)
@@ -38,8 +44,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     }
     
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let movies = movies {
-            return movies.count
+        if let filteredMovies = filteredMovies {
+            return filteredMovies.count
         }
         else {
             return 0
@@ -49,7 +55,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
-        let movie = movies![indexPath.row]
+        let movie = filteredMovies![indexPath.row]
         let title = movie.value(forKey: "title") as! String
         let overview = movie.value(forKey: "overview") as! String
         let basePosterUrl = "https://image.tmdb.org/t/p/w500/"
@@ -76,6 +82,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             if let data = data {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
                     self.movies = dataDictionary.value(forKey: "results") as! [NSDictionary]?
+                    self.filteredMovies = self.movies
                     MBProgressHUD.hide(for: self.view, animated: true)
                     self.tableView.reloadData()
                     
@@ -88,7 +95,19 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         task.resume()
     }
     
-
+    public func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredMovies = searchText.isEmpty ? movies : movies!.filter({(dict: NSDictionary) -> Bool in
+            let title = dict.value(forKey: "title") as! String
+            return title.range(of: searchText, options: .caseInsensitive) != nil
+        })
+        
+        tableView.reloadData()
+    }
+    
+    func dismissKeyboard() {
+        tableView.endEditing(true)
+    }
+    
     /*
     // MARK: - Navigation
 
