@@ -28,10 +28,36 @@ class DetailViewController: UIViewController {
         descriptionLabel.text = movie.value(forKey: "overview") as? String
         descriptionLabel.sizeToFit()
         
-        let basePosterUrl = "https://image.tmdb.org/t/p/w500/"
+        let baseLowResPosterUrl = "https://image.tmdb.org/t/p/w45/"
+        let baseHighResPosterUrl = "https://image.tmdb.org/t/p/original/"
+        
         if let moviePosterUrl = movie.value(forKey: "poster_path") as? String {
-            let imageUrl = URL(string: basePosterUrl + moviePosterUrl)
-            posterImageView.setImageWith(imageUrl!)
+            let lowResImageRequest = URLRequest(url: URL(string: baseLowResPosterUrl + moviePosterUrl)!)
+            let highResImageRequest = URLRequest(url: URL(string: baseHighResPosterUrl + moviePosterUrl)!)
+            
+            posterImageView.setImageWith(
+                lowResImageRequest,
+                placeholderImage: nil,
+                success: { (lowResImageRequest, lowResImageResponse, lowResImage) -> Void in
+                    self.posterImageView.alpha = 0.0
+                    self.posterImageView.image = lowResImage
+                    
+                    UIView.animate(
+                        withDuration: 0.3,
+                        animations: { () -> Void in
+                            self.posterImageView.alpha = 1.0
+                        },
+                        completion: { (success) -> Void in
+                            self.posterImageView.setImageWith(
+                                highResImageRequest,
+                                placeholderImage: lowResImage,
+                                success: { (highResImageRequest, highResImageResponse, highResImage) -> Void in
+                                    self.posterImageView.image = highResImage
+                                })
+                        }
+                    )
+                }
+            )
         }
 
         // Do any additional setup after loading the view.
