@@ -29,6 +29,8 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
         tableView.addGestureRecognizer(tap)
         
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .plain, target: nil, action: nil)
+        
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(self.makeRequest(_:)), for: UIControlEvents.valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
